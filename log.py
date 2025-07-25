@@ -27,7 +27,8 @@ class Log:
             name (str): Name of the logger
             write_interval (int): How often the file is written to disk
             permission (str): Write permissions
-            write_time (bool): Whether to include time in log
+            show_time (bool): Whether to show time in the file
+            show_name (bool): Whether to show the name in the file
         """
         self._file = file
         self._name = name
@@ -42,9 +43,13 @@ class Log:
     def _get_time_str(self, time_secs: int = None) -> str:
         if not self._show_time:
             return ""
-        if time:
-            return "[" + _convert_localtime_to_str(time.localtime(time_secs)) + "]:"
-        return "[" + _convert_localtime_to_str(time.localtime()) + "]:"
+
+        time_str = ""
+        if time_secs:
+            time_str = _convert_localtime_to_str(time.localtime(time_secs))
+        else:
+            time_str = _convert_localtime_to_str(time.localtime())
+        return "[" + time_str + "]:"
 
     def write(self, data) -> None:
         """Writes `data` to buffer
