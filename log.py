@@ -62,7 +62,6 @@ class Log:
         if self._show_name:
             message += f"[{self._name}] "
         message += f"{self._get_time_str()} {str(data)}\n".strip(" ")
-        # message = f"[{self._name} {self._get_time_str()}]: {data}\n"
         self._buffer.append(message.strip(" "))
 
     def time(self, func, *args):
@@ -81,6 +80,8 @@ class Log:
         end_time_s = time.time()
         time_end = self._get_time_str(end_time_s)
 
+        time_elapsed = end_time_s - start_time_s
+
         paramater_str = "("
 
         count = 0
@@ -93,6 +94,11 @@ class Log:
 
         paramater_str += ")"
 
+        if not self._show_time and not self._show_name:
+            simple_message = f"({func.__name__}{paramater_str} -> {str(val)}) ({time_elapsed}s)\n"
+            self._buffer.append(simple_message)
+            return val
+
         message = "========================================\n"
 
         if self._show_name:
@@ -103,7 +109,7 @@ class Log:
         if self._show_time:
             message += (
                 f"Start Time: {time_start}, End Time: {time_end}\n"
-                + f"Time Elapsed: {end_time_s - start_time_s}\n"
+                + f"Time Elapsed: {time_elapsed}\n"
                 + "========================================\n"
             )
 
