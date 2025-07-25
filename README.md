@@ -28,7 +28,7 @@ def main():
         debugger.write(val)
         sleep(0.1)
 
-        if val - TARGET < TOLERANCE:
+        if abs(val - TARGET) < TOLERANCE:
             debugger.write(f"got target value {TARGET}")
             break
 
